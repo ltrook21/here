@@ -46,7 +46,9 @@ func getRole() {
 }
 
 func getCtxNs() {
-	cmd := exec.Command("kubectl", "config", "view", "--minify", "--output", "jsonpath=context: {..context.user} namespace: {..namespace}")
+	cmd := exec.Command("kubectl", "config", "view", "--minify", "--output", "jsonpath=context: {..context.user}")
+	
+	cmd2 := exec.Command("kubectl", "config", "view", "--minify", "--output", "jsonpath=namespace: {..namespace}")
 	
 	// Check if the OS is macOS (Mac).
 	if runtime.GOOS == "darwin" {
@@ -63,7 +65,13 @@ func getCtxNs() {
 		fmt.Println("Error:", err)
 		return
 	}
+	output2, err := cmd2.Output()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
 	fmt.Println(string(output))
+	fmt.Println(string(output2))
 }
 
 func main() {
